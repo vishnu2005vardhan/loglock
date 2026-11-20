@@ -93,7 +93,7 @@ docs/        Architecture and presentation material
 ```
 
 ## 👥 Team
-_Add team member names here._
+Team Big Bounty
 
 ## 📜 Status
 🚧 Under active development for The Big Hack 2.0, Bengaluru.
