@@ -1,0 +1,12 @@
+# secrets: never commit
+.env
+quai/.env
+# generated
+data/
+demo/logs/
+__pycache__/
+quai/node_modules/
+quai/cache/
+quai/artifacts/
+quai/metadata/
+quai/hardhat.sandbox.config.js

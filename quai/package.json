@@ -1,0 +1,22 @@
+{
+  "name": "sakshyalog-quai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SakshyaLog LogAnchor smart contract on Quai Network (Orchard Cyprus-1), following the sponsor's Hardhat + quais reference architecture",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test --network hardhat",
+    "preflight": "node scripts/preflight.js",
+    "deploy": "hardhat run scripts/deploy.js --network cyprus1",
+    "bridge": "node scripts/bridge.js"
+  },
+  "dependencies": {
+    "@quai/hardhat-deploy-metadata": "^1.0.8",
+    "dotenv": "^16.6.1",
+    "quais": "^1.0.0-alpha.52"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.24.0"
+  }
+}

@@ -1,0 +1,7 @@
+# Real Ethereum Virtual Machine for the demo + web3 for Polygon Amoy / Anvil.
+# eth-tester is installed WITHOUT its [py-evm] extra on purpose: that extra pulls
+# safe-pysha3, which needs a C++ compiler on Windows. web3 already brings
+# pycryptodome, which does the same hashing.
+web3
+eth-tester
+py-evm>=0.12.0b2,<0.13

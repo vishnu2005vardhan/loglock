@@ -1,0 +1,37 @@
+# One command demo:  docker compose up --build
+# Dashboard: http://localhost:8501   Vault API: http://localhost:8000/docs
+x-env: &env
+  SEAL_KEY0: "1111111111111111111111111111111111111111111111111111111111111111"  # change me
+  HOST_ID: server-01
+  CHAIN_MODE: ${CHAIN_MODE:-evm}            # evm = built-in real EVM; web3 = Polygon Amoy / Anvil
+  RPC_URL: ${RPC_URL:-}
+  PRIVATE_KEY: ${PRIVATE_KEY:-}
+  CONTRACT_ADDRESS: ${CONTRACT_ADDRESS:-}
+
+services:
+  vault:                       # separate machine in real life — attacker can't reach it
+    build: .
+    command: uvicorn vault.api:app --host 0.0.0.0 --port 8000
+    environment:
+      <<: *env
+      ANCHOR_SECONDS: "30"
+      AUDIT_LOG_PATH: /audit/auth.log   # read-only view of the server log = scheduled audit
+      AUDIT_HOST: server-01
+    volumes: [vaultdata:/app/data, serverlogs:/audit:ro]
+    ports: ["8000:8000"]
+
+  server:                      # the "victim server": writes logs + runs the seal agent
+    build: .
+    command: sh -c "python demo/log_generator.py --log /logs/auth.log & python -m agent.agent --log /logs/auth.log"
+    environment: { <<: *env, VAULT_URL: http://vault:8000, EPOCH_SECONDS: "60" }
+    volumes: [serverlogs:/logs]
+    depends_on: [vault]
+
+  dashboard:
+    build: .
+    command: streamlit run app/app.py --server.port 8501 --server.address 0.0.0.0
+    environment: { VAULT_URL: http://vault:8000 }
+    ports: ["8501:8501"]
+    depends_on: [vault]
+
+volumes: { vaultdata: {}, serverlogs: {} }
